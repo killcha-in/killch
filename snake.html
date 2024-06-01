@@ -1,0 +1,413 @@
+
+
+
+<!-- Markdown Preview - https://dillinger.io/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style type="text/css">
+        @import url("https://fonts.googleapis.com/css?family=VT323");
+        
+        ::selection {color:#FFFFFF; background:transparent;}
+        ::-moz-selection {color:#FFFFFF; background:transparent;}
+        
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "VT323";
+        }
+
+        body {
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        /* Container for the video background */
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        /* Video styling */
+        #myVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Your existing styles for header, h1, p, canvas, etc. */
+        header {
+            z-index: 1; /* Ensure header appears above the video */
+        }
+
+        /* Additional styles if needed */
+
+    </style>
+</head>
+<body>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake - music from SomaFM</title>
+    <style>
+        /* Your existing styles */
+
+        #audio-control-container {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #audio-control {
+            position: relative;
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #soma-text {
+            font-size: 16px;
+            font-weight: regular;
+            color: #fff;
+            margin-bottom: 0px;
+            display: block;
+        }
+
+        #volume-bar {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 5px;
+            bottom: 100%;
+            left: 0;
+            display: none;
+        }
+
+        #volume-progress {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SomaFM audio player -->
+<div id="audio-control-container">
+    <div id="soma-text">SomaFM</div>
+
+    <div id="audio-control" onclick="changeMusicStream()">
+        Next Stream
+        <div id="volume-bar">
+            <div id="volume-progress"></div>
+        </div>
+    </div>
+
+    <audio id="background-audio" loop controls style="display:none;">
+        <source id="music-source" type="audio/aac">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<!-- JavaScript for the SomaFM audio player -->
+<script>
+    const audio = document.getElementById('background-audio');
+    const audioControl = document.getElementById('audio-control');
+    const volumeBar = document.getElementById('volume-bar');
+    const volumeProgress = document.getElementById('volume-progress');
+    const somaText = document.getElementById('soma-text');
+    const musicSource = document.getElementById('music-source');
+
+    // Array of music stream options
+    const musicOptions = [
+        "https://ice4.somafm.com/groovesalad-128-aac",
+        "https://ice4.somafm.com/gsclassic-128-aac",
+        "https://ice4.somafm.com/cliqhop-128-aac",
+        "https://ice4.somafm.com/beatblender-128-aac"
+    ];
+
+    let currentMusicIndex = 0;
+
+    function changeMusicStream() {
+        currentMusicIndex = (currentMusicIndex + 1) % musicOptions.length;
+        musicSource.src = musicOptions[currentMusicIndex];
+        audio.load();
+        audio.play();
+        somaText.innerText = musicOptions[currentMusicIndex].split('/').pop();
+    }
+
+    audioControl.addEventListener('mouseover', () => {
+        volumeBar.style.display = 'block';
+    });
+
+    audioControl.addEventListener('mouseout', () => {
+        volumeBar.style.display = 'none';
+    });
+
+    volumeBar.addEventListener('mousemove', (event) => {
+        const rect = volumeBar.getBoundingClientRect();
+        const percentage = (event.clientX - rect.left) / rect.width;
+        audio.volume = percentage;
+        volumeProgress.style.width = percentage * 100 + '%';
+    });
+
+    volumeBar.addEventListener('mouseout', () => {
+        volumeBar.style.display = 'none';
+    });
+
+    setTimeout(() => {
+        audioControl.style.display = 'block';
+    }, 2000);
+
+    // Initial setup
+    changeMusicStream(); // Set the default music stream
+</script>
+</body>
+</html>
+
+
+
+<head>
+<meta charset="UTF-8">
+<title>Snake</title>
+<style type="text/css">
+            @import url("https://fonts.googleapis.com/css?family=VT323");
+            
+            ::selection {color:#FFFFFF; background:transparent;}
+            ::-moz-selection {color:#FFFFFF; background:transparent;}
+            
+            *{
+                margin: 0;
+                padding: 0;
+                font-family: "VT323";
+            }
+            body{
+                background-color: #000000;
+            }
+            .wrap{
+                margin-left: auto;
+                margin-right: auto;
+            }
+            header{
+                width: 340px;
+                font-size: 0;
+            }
+            canvas{
+                display: none;
+                border-style: solid;
+                border-width: 10px;
+                border-color: #FFFFFF;
+            }
+            canvas:focus{
+                outline: none;
+            }
+            
+            /* Top Styles */
+            h1{
+                display: inline-block;
+                width: 100px;
+                font-size: 32px;
+                color: #FFFFFF;
+            }
+            .score{
+                display: inline-block;
+                width: 240px;
+                font-size: 20px;
+                color: #FFFFFF;
+                text-align: right;
+            }
+            .score_value{
+                font-size: inherit;
+            }
+            
+            
+            
+            /* All screens style */
+            #gameover a, #setting a, #menu a{
+                display: block;
+            }
+       
+            #gameover a, #setting a:hover, #menu a:hover{
+                cursor: pointer;
+            }
+            
+            #gameover a:hover::before, #setting a:hover::before, #menu a:hover::before{
+                content: ">";
+                margin-right: 10px;
+            }
+            
+            /* Menu Screen Style */
+            #menu{
+                display: block;
+                width: 340px;
+                padding-top: 95px;
+                padding-bottom: 95px;
+                font-size: 40px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                color: #FFF;
+            }
+            
+            #menu h2{
+                -webkit-animation: logo-ani 1000ms linear infinite;
+                        animation: logo-ani 1000ms linear infinite;
+                margin-bottom: 30px;
+                
+            }
+            
+            #menu a{
+                font-size: 30px;
+            }
+            
+            @-webkit-keyframes logo-ani{
+               50%{-webkit-transform: scale(1.3,1.3);}
+              100%{-webkit-transform: scale(1.0,1.0);}
+            }
+
+            @keyframes logo-ani{
+               50%{transform: scale(1.3,1.3);}
+              100%{transform: scale(1.0,1.0);}
+            }
+            
+            
+            /* Game Over Screen Style */
+            
+            #gameover{
+                display: none;
+                width: 340px;
+                padding-top: 95px;
+                padding-bottom: 95px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                font-size: 30px;
+                color: #FFF;
+            }
+            
+            #gameover p{
+                margin-top: 25px;
+                font-size: 20px;
+            }
+            
+            /* Settings Screen Style */
+            #setting{
+                display: none;
+                width: 340px;
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 85px;
+                padding-bottom: 85px;
+                font-size: 30px;
+                color: #FFF;
+                text-align: center;
+            }
+            
+            #setting h2{
+                margin-bottom: 15px;
+            }
+            
+            #setting p{
+                margin-top: 10px;
+            }
+            
+            #setting input{
+                display:none;
+            }
+            
+            #setting label{
+                cursor: pointer;
+            }
+            
+            #setting input:checked + label{
+                background-color: #FFF;
+                color: #000;
+            }
+</style>
+
+
+
+<body>
+	
+
+
+<header class="wrap">
+                <h1>Snake</h1>
+                <p class="score">Score: <span id="score_value">0</span></p>
+            </header>
+            <canvas class="wrap" id="snake" width="320" height="320" tabindex="1"></canvas>
+        
+            <!-- Game Over Screen -->
+            <div id="gameover">
+                <h2>Game Over</h2>
+                <p>press <span style="background-color: #FFFFFF; color: #000000">space</span> to begin a</p>
+                <a id="newgame_gameover">new game</a>
+                <a id="setting_gameover">settings</a>
+                <a style="color: inherit" href="javascript:window.history.back();">back</a>
+
+                
+            </div>
+        
+            <!-- Setting screen -->
+            <div id="setting">
+                <h2>Settings</h2>
+                
+                <a id="newgame_setting">new game</a>
+                
+                <p>Speed:
+                    <input id="speed1" type="radio" name="speed" value="120"/>
+                    <label for="speed1">Slow</label>
+                    <input id="speed2" type="radio" name="speed" value="75" checked/>
+                    <label for="speed2">Normal</label>
+                    <input id="speed3" type="radio" name="speed" value="35"/>
+                    <label for="speed3">Fast</label>
+                </p>
+                
+                <p>Wall:
+                    <input id="wallon" type="radio" name="wall" value="1" checked/>
+                    <label for="wallon">On</label>
+                    <input id="walloff" type="radio" name="wall" value="0"/>
+                    <label for="walloff">Off</label>
+                </p>
+
+            </div>
+        
+            <!-- Main Menu Screen -->
+            <div id="menu">
+                <h2>Snake</h2>
+
+                <a id="newgame_menu">new game</a>
+                <a id="setting_menu">settings</a>
+                <a style="color: inherit" onclick="history.back()">back</a>
+
+
+            </div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	
+
+
+<script>"use strict";var wprRemoveCPCSS=function wprRemoveCPCSS(){var elem;document.querySelector('link[data-rocket-async="style"][rel="preload"]')?setTimeout(wprRemoveCPCSS,200):(elem=document.getElementById("rocket-critical-css"))&&"remove"in elem&&elem.remove()};window.addEventListener?window.addEventListener("load",wprRemoveCPCSS):window.attachEvent&&window.attachEvent("onload",wprRemoveCPCSS);</script><script src="https://www.html5canvastutorials.com/wp-content/cache/min/1/863b46128e3ba19b3b87800181b1f14d.js" data-minify="1"></script><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT%20Sans%7CLato%3A400%2C700%2C400italic%2C700italic%7COswald%3A400%2C700&display=swap" /><link rel="stylesheet" href="https://www.html5canvastutorials.com/wp-content/cache/min/1/d94d61c3c9378c3a73090741906359ca.css" media="all" data-minify="1" /><link rel="stylesheet" href="/libraries/codeMirror/lib/codemirror.css"></noscript></body>      
+
